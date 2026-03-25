@@ -72,4 +72,7 @@ def analysis_parameters():
             disabled=not st.session_state.get("video_choice", True),
         )
 
+    with st.container(horizontal_alignment='center'):
+        
+        st.button('Analyze Video')
     return overlap_threshold

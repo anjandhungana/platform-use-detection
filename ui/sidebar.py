@@ -3,6 +3,7 @@ import streamlit as st
 
 def uploader():
     upload_file = st.sidebar.file_uploader("Upload Video File", type=["mp4", "mov"])
+
     return upload_file
 
 
