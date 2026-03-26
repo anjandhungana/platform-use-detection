@@ -387,38 +387,41 @@ if upload_file is not None:
             or csv_id_stats_bytes is not None
         ):
             st.write("Report download")
+            report_col1, report_col2 = st.columns(2)
+            with report_col1:
+                if video_bytes is not None and video_filename:
+                    st.download_button(
+                        "Download video report",
+                        data=video_bytes,
+                        file_name=video_filename,
+                        mime="video/mp4",
+                    )
+            with report_col2:
+                if pdf_bytes is not None and pdf_filename:
+                    st.download_button(
+                        "Download PDF report",
+                        data=pdf_bytes,
+                        file_name=pdf_filename,
+                        mime="application/pdf",
+                    )
 
-        if video_bytes is not None and video_filename:
-            st.download_button(
-                "Download video report",
-                data=video_bytes,
-                file_name=video_filename,
-                mime="video/mp4",
-            )
-
-        if pdf_bytes is not None and pdf_filename:
-            st.download_button(
-                "Download PDF report",
-                data=pdf_bytes,
-                file_name=pdf_filename,
-                mime="application/pdf",
-            )
-
-        if csv_timeline_bytes is not None and csv_timeline_filename:
-            st.download_button(
-                "Download timeline CSV",
-                data=csv_timeline_bytes,
-                file_name=csv_timeline_filename,
-                mime="text/csv",
-            )
-
-        if csv_id_stats_bytes is not None and csv_id_stats_filename:
-            st.download_button(
-                "Download ID stats CSV",
-                data=csv_id_stats_bytes,
-                file_name=csv_id_stats_filename,
-                mime="text/csv",
-            )
+            csv_col1, csv_col2 = st.columns(2)
+            with csv_col1:
+                if csv_timeline_bytes is not None and csv_timeline_filename:
+                    st.download_button(
+                        "Download timeline CSV",
+                        data=csv_timeline_bytes,
+                        file_name=csv_timeline_filename,
+                        mime="text/csv",
+                    )
+            with csv_col2:
+                if csv_id_stats_bytes is not None and csv_id_stats_filename:
+                    st.download_button(
+                        "Download ID stats CSV",
+                        data=csv_id_stats_bytes,
+                        file_name=csv_id_stats_filename,
+                        mime="text/csv",
+                    )
 
 else:
     # Show upload prompt when no file is uploaded

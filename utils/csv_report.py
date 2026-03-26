@@ -49,7 +49,9 @@ def _write_id_stats_csv(path: str, per_id_records: list[dict[str, Any]]) -> None
                     "first_frame": int(record.get("first_frame", 0)),
                     "last_frame": int(record.get("last_frame", 0)),
                     "duration_frames": int(record.get("duration_frames", 0)),
-                    "duration_seconds": float(record.get("duration_seconds", 0.0)),
+                    "duration_seconds": round(
+                        float(record.get("duration_seconds", 0.0)), 2
+                    ),
                 }
             )
 
