@@ -35,7 +35,7 @@ Python packages used by this project:
 - streamlit
 - ultralytics
 - supervision
-- opencv-python
+- opencv-python-headless
 - numpy
 - jinja2
 - weasyprint
@@ -131,3 +131,4 @@ Columns:
 - If boundary filtering is enabled with fewer than 3 points, inference falls back to no boundary filtering.
 - PDF generation depends on WeasyPrint. On some Linux systems, additional system libraries may be required.
 - If local model files are missing, the app automatically tries private Hugging Face download using Streamlit secrets.
+- Streamlit Cloud installs system packages from `packages.txt` (`libgl1`, `libglib2.0-0`) to avoid OpenCV import errors.
