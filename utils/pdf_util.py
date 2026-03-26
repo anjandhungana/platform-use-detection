@@ -74,7 +74,9 @@ def generate_pdf_report(
 		from weasyprint import CSS, HTML
 	except Exception as exc:
 		raise RuntimeError(
-			"Missing PDF dependencies. Install with: pip install jinja2 weasyprint"
+			"Missing PDF dependencies or system libraries. "
+			"Install python packages with: pip install jinja2 weasyprint. "
+			f"Original import error: {exc}"
 		) from exc
 
 	template_dir = (
