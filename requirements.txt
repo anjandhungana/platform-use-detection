@@ -1,7 +1,7 @@
 streamlit
 ultralytics
 supervision
-opencv-python
+opencv-python-headless
 numpy
 jinja2
 weasyprint

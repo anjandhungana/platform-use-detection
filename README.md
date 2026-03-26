@@ -35,7 +35,7 @@ Python packages used by this project:
 - streamlit
 - ultralytics
 - supervision
-- opencv-python
+- opencv-python-headless
 - numpy
 - jinja2
 - weasyprint
