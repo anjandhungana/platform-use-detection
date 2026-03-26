@@ -42,6 +42,7 @@ Python packages used by this project:
 - streamlit-image-coordinates
 - streamlit-js-eval
 - huggingface_hub
+- lapx (provides `lap` module for Ultralytics tracking)
 
 ## Setup
 
@@ -85,6 +86,11 @@ streamlit run app.py
 ```
 
 Then open the local URL shown by Streamlit in your browser.
+
+## Streamlit Cloud Runtime
+
+- `runtime.txt` pins Python to `3.11` for compatibility with tracking dependencies.
+- `packages.txt` installs Linux system libraries required by OpenCV runtime.
 
 ## Workflow
 
@@ -131,4 +137,4 @@ Columns:
 - If boundary filtering is enabled with fewer than 3 points, inference falls back to no boundary filtering.
 - PDF generation depends on WeasyPrint. On some Linux systems, additional system libraries may be required.
 - If local model files are missing, the app automatically tries private Hugging Face download using Streamlit secrets.
-- Streamlit Cloud installs system packages from `packages.txt` (`libgl1`) to avoid OpenCV import errors.
+- Streamlit Cloud installs system packages from `packages.txt` (`libgl1`, `libglib2.0-0t64`) to avoid OpenCV import errors.
