@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>{{ report_title }}</title>
+  </head>
+  <body>
+    <header class="header">
+      <h1>{{ report_title }}</h1>
+      <div class="meta-grid">
+        <div><strong>Source Video:</strong> {{ source_video_name }}</div>
+        <div><strong>Generated:</strong> {{ generated_at }}</div>
+        <div><strong>Model:</strong> {{ model_name }}</div>
+        <div><strong>Confidence Threshold:</strong> {{ '%.2f'|format(confidence_threshold) }}</div>
+      </div>
+    </header>
+
+    <section>
+      <h2>Summary</h2>
+      <div class="stats-grid">
+        {% for key, value in stats.items() %}
+        <article class="stat-card">
+          <div class="stat-key">{{ key }}</div>
+          <div class="stat-value">{{ value }}</div>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    {% if include_heatmap %}
+    <section>
+      <h2>Detection Heatmap</h2>
+      {% if detection_heatmap_data_uri %}
+      <p class="muted">Detection points used: {{ detection_heatmap_point_count }}</p>
+      <img class="heatmap-frame" src="{{ detection_heatmap_data_uri }}" alt="Detection heatmap overlay" />
+      {% else %}
+      <p class="muted">No detections available for spatial heatmap.</p>
+      {% endif %}
+    </section>
+    {% endif %}
+
+    {% if timeline_svg %}
+    <section>
+      <h2>Detection Timeline</h2>
+      <div class="timeline-wrap">{{ timeline_svg | safe }}</div>
+    </section>
+    {% endif %}
+
+    {% if sample_frame_data_uri %}
+    <section>
+      <h2>Annotated Sample Frame</h2>
+      <p class="muted">Frame index: {{ sample_frame_index }}</p>
+      <img class="sample-frame" src="{{ sample_frame_data_uri }}" alt="Annotated sample frame" />
+    </section>
+    {% endif %}
+  </body>
+</html>
