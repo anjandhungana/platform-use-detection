@@ -13,7 +13,7 @@ def _safe_base_name(source_video_name: str) -> str:
 
 
 def _write_timeline_csv(path: str, per_second_records: list[dict[str, Any]]) -> None:
-    fieldnames = ["second_index", "timestamp_sec", "bird_count", "unique_ids_active"]
+    fieldnames = ["second_index", "timestamp_sec", "unique_bird_ids"]
     with open(path, "w", newline="", encoding="utf-8") as file_obj:
         writer = csv.DictWriter(file_obj, fieldnames=fieldnames)
         writer.writeheader()
@@ -22,8 +22,9 @@ def _write_timeline_csv(path: str, per_second_records: list[dict[str, Any]]) -> 
                 {
                     "second_index": int(record.get("second_index", 0)),
                     "timestamp_sec": float(record.get("timestamp_sec", 0.0)),
-                    "bird_count": int(record.get("bird_count", 0)),
-                    "unique_ids_active": int(record.get("unique_ids_active", 0)),
+                    "unique_bird_ids": int(
+                        record.get("unique_bird_ids", record.get("unique_ids_active", 0))
+                    ),
                 }
             )
 
@@ -36,7 +37,6 @@ def _write_id_stats_csv(path: str, per_id_records: list[dict[str, Any]]) -> None
         "last_frame",
         "duration_frames",
         "duration_seconds",
-        "total_detections",
     ]
     with open(path, "w", newline="", encoding="utf-8") as file_obj:
         writer = csv.DictWriter(file_obj, fieldnames=fieldnames)
@@ -50,7 +50,6 @@ def _write_id_stats_csv(path: str, per_id_records: list[dict[str, Any]]) -> None
                     "last_frame": int(record.get("last_frame", 0)),
                     "duration_frames": int(record.get("duration_frames", 0)),
                     "duration_seconds": float(record.get("duration_seconds", 0.0)),
-                    "total_detections": int(record.get("total_detections", 0)),
                 }
             )
 
