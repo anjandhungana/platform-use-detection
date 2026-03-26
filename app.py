@@ -107,7 +107,6 @@ def _download_model_from_private_hf(model_filename: str) -> str:
             revision=revision,
             token=token,
             local_dir=model_dir,
-            local_dir_use_symlinks=False,
         )
     except Exception as exc:
         raise RuntimeError(

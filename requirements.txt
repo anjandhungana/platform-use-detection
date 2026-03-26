@@ -8,3 +8,4 @@ weasyprint
 streamlit-image-coordinates
 streamlit-js-eval
 huggingface_hub
+lapx>=0.5.12

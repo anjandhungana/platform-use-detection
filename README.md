@@ -42,6 +42,7 @@ Python packages used by this project:
 - streamlit-image-coordinates
 - streamlit-js-eval
 - huggingface_hub
+- lapx (provides `lap` module for Ultralytics tracking)
 
 ## Setup
 
@@ -85,6 +86,11 @@ streamlit run app.py
 ```
 
 Then open the local URL shown by Streamlit in your browser.
+
+## Streamlit Cloud Runtime
+
+- `runtime.txt` pins Python to `3.11` for compatibility with tracking dependencies.
+- `packages.txt` installs Linux system libraries required by OpenCV runtime.
 
 ## Workflow
 
