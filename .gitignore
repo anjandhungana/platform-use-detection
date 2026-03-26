@@ -3,3 +3,4 @@ __pycache__/
 ui/__pycache__/
 utils/__pycache__/
 assets/models/*.pt
+.streamlit/secrets.toml
