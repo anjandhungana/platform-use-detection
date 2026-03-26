@@ -1,6 +1,7 @@
 import streamlit as st
 import cv2
 from ultralytics import YOLO
+from huggingface_hub import hf_hub_download
 
 from utils.extract_frame import extractFrames
 from utils.annotation import annotate
@@ -12,6 +13,9 @@ import os
 from ui.sidebar import get_sidebar_inputs, render_annotation_sidebar
 from ui.parameter import analysis_parameters
 import base64
+
+
+APP_DIR = os.path.dirname(__file__)
 
 
 def _get_background_css():
@@ -77,6 +81,53 @@ def _get_model_class_names(model_filepath: str) -> list[str]:
     ordered_names = [str(names[idx]) for idx in sorted(names.keys())]
     cache[model_filepath] = ordered_names
     return ordered_names
+
+
+def _download_model_from_private_hf(model_filename: str) -> str:
+    model_dir = os.path.join(APP_DIR, "assets", "models")
+    local_model_path = os.path.join(model_dir, model_filename)
+    if os.path.isfile(local_model_path):
+        return local_model_path
+
+    repo_id = st.secrets.get("HF_MODEL_REPO")
+    token = st.secrets.get("HF_TOKEN")
+    revision = st.secrets.get("HF_MODEL_REVISION", "main")
+
+    if not repo_id:
+        raise RuntimeError("Missing secret HF_MODEL_REPO.")
+    if not token:
+        raise RuntimeError("Missing secret HF_TOKEN.")
+
+    os.makedirs(model_dir, exist_ok=True)
+
+    try:
+        downloaded_path = hf_hub_download(
+            repo_id=repo_id,
+            filename=model_filename,
+            revision=revision,
+            token=token,
+            local_dir=model_dir,
+            local_dir_use_symlinks=False,
+        )
+    except Exception as exc:
+        raise RuntimeError(
+            f"Failed to download model '{model_filename}' from Hugging Face repo '{repo_id}': {exc}"
+        ) from exc
+
+    return downloaded_path
+
+
+def _resolve_model_filepath(selected_model: int) -> str:
+    model_relative_path = MODEL_FILEPATHS.get(selected_model)
+    if model_relative_path is None:
+        raise ValueError("Invalid model selection.")
+
+    local_model_path = os.path.join(APP_DIR, model_relative_path)
+    if os.path.isfile(local_model_path):
+        return local_model_path
+
+    model_filename = os.path.basename(model_relative_path)
+    return _download_model_from_private_hf(model_filename)
 
 
 st.set_page_config(page_title="Platform Use Analyzer", layout="centered")
@@ -215,13 +266,12 @@ if upload_file is not None:
         csv_choice,
     ) = analysis_parameters()
 
-    model_relative_path = MODEL_FILEPATHS.get(selected_model)
     model_display_name = MODEL_DISPLAY_NAMES.get(selected_model, "Unknown")
-    if model_relative_path is None:
-        st.error("Invalid model selection.")
+    try:
+        model_filepath = _resolve_model_filepath(selected_model)
+    except Exception as exc:
+        st.error(f"Model preparation failed: {exc}")
         st.stop()
-
-    model_filepath = os.path.join(os.path.dirname(__file__), model_relative_path)
 
     label_renames: dict[str, str] = {}
     try:

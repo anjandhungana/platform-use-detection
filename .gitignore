@@ -1,0 +1,6 @@
+__pycache__/
+*.py[cod]
+ui/__pycache__/
+utils/__pycache__/
+assets/models/*.pt
+.streamlit/secrets.toml
