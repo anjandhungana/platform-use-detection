@@ -41,6 +41,7 @@ Python packages used by this project:
 - weasyprint
 - streamlit-image-coordinates
 - streamlit-js-eval
+- huggingface_hub
 
 ## Setup
 
@@ -49,16 +50,31 @@ Python packages used by this project:
 2. Install dependencies:
 
 ```bash
-pip install streamlit ultralytics supervision opencv-python numpy jinja2 weasyprint streamlit-image-coordinates streamlit-js-eval
+pip install -r requirements.txt
 ```
 
-3. Ensure YOLO model weights are present in assets/models/:
+3. Configure model access (choose one option):
+
+Option A: local model files in assets/models/
 
 - yolo11nA1.pt
 - yolo11sA1.pt
 - yolo11mA1.pt
 - yolo11lA1.pt
 - yolo11xA1.pt
+
+Option B: private Hugging Face repository (recommended for Streamlit Cloud)
+
+- Upload model files to your private Hugging Face repo.
+- Add the following secrets in Streamlit Cloud:
+
+```toml
+HF_MODEL_REPO = "your-username/your-private-repo"
+HF_TOKEN = "hf_xxx"
+HF_MODEL_REVISION = "main"
+```
+
+- The app will lazily download only the selected model on first use.
 
 ## Run
 
@@ -114,3 +130,4 @@ Columns:
 
 - If boundary filtering is enabled with fewer than 3 points, inference falls back to no boundary filtering.
 - PDF generation depends on WeasyPrint. On some Linux systems, additional system libraries may be required.
+- If local model files are missing, the app automatically tries private Hugging Face download using Streamlit secrets.
